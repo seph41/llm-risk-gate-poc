@@ -28,6 +28,16 @@ jobs:
       - name: Install Semgrep
         run: |
           pip install semgrep
+      
+      - name: Run Semgrep
+        run: |
+          semgrep --config=p/ci --html --output=semgrep-report.html
+
+      - name: Upload Semgrep report
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-report
+          path: semgrep-report.html
 
 
       - name: Lint with flake8
@@ -44,12 +54,4 @@ jobs:
         run: |
           pip install pytest
           pytest
-      - name: Run Semgrep
-        run: |
-          semgrep --config=p/ci --html --output=semgrep-report.html
-
-      - name: Upload Semgrep report
-        uses: actions/upload-artifact@v4
-        with:
-          name: semgrep-report
-          path: semgrep-report.html
+      
