@@ -82,21 +82,41 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Docker app
-        run: docker build -t myapp .
+      # 1. Build l'image Docker de ton app Flask
+      - name: Build Docker image
+        run: docker build -t my-flask-app .
 
-      - name: Run app in background
-        run: docker run -d -p 8080:8080 myapp
+      # 2. Run le container en arrière-plan sur le port 8080
+      - name: Run Flask app
+        run: docker run -d -p 8080:8080 my-flask-app
 
-      - name: Run OWASP ZAP baseline scan
+      # 3. Attendre que le service soit UP (max 30s)
+      - name: Wait for Flask app
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:8080 > /dev/null; then
+              echo "Flask app is up!"
+              exit 0
+            fi
+            echo "Waiting for app..."
+            sleep 1
+          done
+          echo "App did not start in time" && exit 1
+
+      # 4. Lancer OWASP ZAP Baseline Scan
+      - name: Run ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.7.0
         with:
           target: 'http://localhost:8080'
-          format: 'json'
-          output: 'zap-report.json'
+          cmd_options: '-r zap-report.html -J zap-report.json -w zap-warnings.md'
+          fail_action: false
 
-      - name: Upload ZAP report
-        uses: actions/upload-artifact@v4
+      # 5. Uploader les rapports ZAP
+      - name: Upload ZAP Reports
+        uses: actions/upload-artifact@v3
         with:
-          name: zap-report
-          path: zap-report.json
+          name: zap-reports
+          path: |
+            zap-report.html
+            zap-warnings.md
+            zap-report.json
