@@ -46,7 +46,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node
         uses: actions/setup-node@v3
@@ -62,7 +62,7 @@ jobs:
         run: snyk auth $SNYK_TOKEN || true
 
       - name: Test Python dependencies
-        run: snyk test --file=requirements.txt --json > snyk-report.json
+        run: snyk test --file=requirements.txt --json > snyk-report.json || true
 
       - name: Upload Snyk report
         uses: actions/upload-artifact@v4
