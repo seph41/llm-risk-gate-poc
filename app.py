@@ -1,10 +1,11 @@
-# app.py
+from flask import Flask
 
-from flask import Flask, request
 app = Flask(__name__)
 
-@app.route("/vulnerable")
-def vulnerable():
-    # Injection simple volontaire
-    param = request.args.get("param")
-    return f"Hello {param}"  # vulnérable à XSS
+@app.route("/")
+def hello():
+    return "Hello World from Flask inside Docker!"
+
+if __name__ == "__main__":
+    # écoute sur toutes les interfaces, port 8080
+    app.run(host="0.0.0.0", port=8080)
