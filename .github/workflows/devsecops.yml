@@ -125,6 +125,4 @@ jobs:
             zap-report.json
             zap-warnings.md
 
-      # 7️⃣ Stop Flask container
-      - name: Stop Flask container
-        run: docker stop my-flask-app
+     
