@@ -7,3 +7,7 @@ def supprimer_fichier():
     os.system("rm -f " + fichier)
 
 supprimer_fichier()
+def dangerous_function():
+    # Vulnérabilité volontaire : exécution de code arbitraire
+    user_input = input("Enter something: ")
+    eval(user_input)

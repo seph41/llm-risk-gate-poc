@@ -28,7 +28,7 @@ jobs:
 
       - name: Run Semgrep
         run: |
-          semgrep --config=p/ci --fail --json --output=semgrep-report.json
+          semgrep --config=p/ci --f --json --output=semgrep-report.json
 
 
       - name: Upload Semgrep report
