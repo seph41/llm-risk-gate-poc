@@ -127,4 +127,4 @@ jobs:
 
       # 7️⃣ Stop Flask container
       - name: Stop Flask container
-        run: docker stop flask-test
+        run: docker stop my-flask-app
